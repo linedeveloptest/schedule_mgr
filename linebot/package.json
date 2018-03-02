@@ -1,43 +1,22 @@
 {
-  "name": "linebot",
-  "version": "1.4.1",
-  "description": "Node.js SDK for the LINE Messaging API",
-  "main": "index.js",
-  "files": [
-    "index.js",
-    "lib/**"
-  ],
-  "scripts": {
-    "start": "node examples/demo.js",
-    "pretest": "eslint index.js lib/**/*.js test/**/*.js",
-    "test": "mocha --timeout 5000 --exit",
-    "lint": "eslint index.js lib/**/*.js test/**/*.js"
+  "name": "node-js-line-bot",
+  "version": "0.1.0",
+  "description": "A sample Node.js linebot app",
+  "engines": {
+    "node": "8.9.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/boybundit/linebot.git"
+  "dependencies": {
+    "linebot": "^1.3.0",
+    "express": "^4.15.2",
+    "ejs": "^2.5.7",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
   },
   "keywords": [
-    "LINE",
-    "Messaging",
-    "API",
-    "chat",
-    "bot"
+    "linebot",
+    "node",
+    "heroku",
+    "express"
   ],
-  "author": "Bundit Jitkongchuen",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/boybundit/linebot/issues"
-  },
-  "homepage": "https://github.com/boybundit/linebot#readme",
-  "dependencies": {
-    "body-parser": "^1.18.2",
-    "debug": "^3.1.0",
-    "node-fetch": "^1.7.3"
-  },
-  "devDependencies": {
-    "eslint": "^4.16.0",
-    "mocha": "^5.0.0",
-    "nock": "^9.1.6"
-  }
+  "license": "MIT"
 }
