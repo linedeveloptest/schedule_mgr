@@ -46,6 +46,7 @@ app.get('/',function(req,res){
 app.post('/linewebhook', linebotParser);
 
 bot.on('message', function (event) {
+	
 	switch (event.message.type) {
 		case 'text':
 			switch (event.message.text) {
