@@ -46,6 +46,7 @@ app.get('/',function(req,res){
 app.post('/linewebhook', linebotParser);
 
 bot.on('message', function (event) {
+	
 	switch (event.message.type) {
 		case 'text':
 			switch (event.message.text) {
@@ -54,7 +55,7 @@ bot.on('message', function (event) {
 					rp(aqiOpt)
 					.then(function (repos) {
 						data = readAQI(repos);
-						event.reply(data.County + data.SiteName +
+						event.reply(event.userId + "\n"data.County + data.SiteName +
 						'\n\nPM2.5指數：'+ data["PM2.5_AVG"] + 
 					    '\n狀態：' + data.Status);
 					})
