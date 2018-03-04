@@ -2,6 +2,7 @@ const linebot = require('linebot');
 const express = require('express');
 const rp = require('request-promise');
 const bodyParser = require('body-parser');
+const identification = require('./identification');
 
 const SITE_NAME = '西屯';
 const aqiOpt = {
@@ -10,9 +11,9 @@ const aqiOpt = {
 }; 
 
 const bot = linebot({
-	channelId: process.env.CHANNEL_ID,
-	channelSecret: process.env.CHANNEL_SECRET,
-	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
+    channelId: process.env.CHANNEL_ID,
+    channelSecret: process.env.CHANNEL_SECRET,
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
 });
 
 function readAQI(repos){
@@ -39,51 +40,54 @@ app.get('/',function(req,res){
         res.render('index', {AQI:readAQI(repos)});
     })
     .catch(function (err) {
-		res.send("無法取得空氣品質資料～");
+        res.send("無法取得空氣品質資料～");
     });
 });
 
 app.post('/linewebhook', linebotParser);
 
 bot.on('message', function (event) {
-	
-	switch (event.message.type) {
-		case 'text':
-			switch (event.message.text) {
-				case '空氣':
-					let data;
-					rp(aqiOpt)
-					.then(function (repos) {
-						data = readAQI(repos);
-						event.reply(event.userId + "\n" + data.County + data.SiteName +
-						'\n\nPM2.5指數：'+ data["PM2.5_AVG"] + 
-					    '\n狀態：' + data.Status);
-					})
-					.catch(function (err) {
-						event.reply('無法取得空氣品質資料～');
-					});
-					break;
+    
+    switch (event.message.type) {
+        case 'text':
+            switch (event.message.text) {
+                case '空氣':
+                    let data;
+                    rp(aqiOpt)
+                    .then(function (repos) {
+                        data = readAQI(repos);
+                        event.reply(event.userId + "\n" + data.County + data.SiteName +
+                        '\n\nPM2.5指數：'+ data["PM2.5_AVG"] + 
+                        '\n狀態：' + data.Status);
+                    })
+                    .catch(function (err) {
+                        event.reply('無法取得空氣品質資料～');
+                    });
+                    break;
 
-				case 'Me':
-					event.source.profile().then(function (profile) {
-						return event.reply('Hello ' + profile.displayName + ' ' + profile.userId);
-					});
-					break;
-			}
-			break;
-		case 'sticker':
-			event.reply({
-				type: 'sticker',
-				packageId: 1,
-				stickerId: 1
-			});
-			break;
-		default:
-			event.reply('Unknow message: ' + JSON.stringify(event));
-			break;
-	}
+                case 'Me':
+                    identification.identify(event.source.profile().userId, event.source.profile().displayName, function(data) {
+                        event.reply(data);   
+                    });
+                    event.source.profile().then(function (profile) {
+                        return event.reply('Hello ++' + profile.displayName + ' ' + profile.userId);
+                    });
+                    break;
+            }
+            break;
+        case 'sticker':
+            event.reply({
+                type: 'sticker',
+                packageId: 1,
+                stickerId: 1
+            });
+            break;
+        default:
+            event.reply('Unknow message: ' + JSON.stringify(event));
+            break;
+    }
 });
 
 app.listen(process.env.PORT || 80, function () {
-	console.log('LineBot is running.');
+    console.log('LineBot is running.');
 });
