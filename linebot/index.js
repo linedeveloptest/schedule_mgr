@@ -7,7 +7,7 @@ const SITE_NAME = '西屯';
 const aqiOpt = {
     uri: "http://opendata2.epa.gov.tw/AQI.json",
     json: true
-}; 
+};
 
 const bot = linebot({
 	channelId: process.env.CHANNEL_ID,
@@ -17,7 +17,7 @@ const bot = linebot({
 
 function readAQI(repos){
     let data;
-    
+
     for (i in repos) {
         if (repos[i].SiteName == SITE_NAME) {
             data = repos[i];
@@ -55,7 +55,7 @@ bot.on('message', function (event) {
 					.then(function (repos) {
 						data = readAQI(repos);
 						event.reply(data.County + data.SiteName +
-						'\n\nPM2.5指數：'+ data["PM2.5_AVG"] + 
+						'\n\nPM2.5指數：'+ data["PM2.5_AVG"] +
 					    '\n狀態：' + data.Status);
 					})
 					.catch(function (err) {
